@@ -23,7 +23,7 @@ const getTrackConfig = ({
           borderRight: "1px solid rgba(214,0,11,0.5)",
         }
       : {
-          backgroundColor: "rgba(98, 203, 102, 0.5)",
+          backgroundColor: "rgba(98, 203, 102, 0.7)",
           borderLeft: "1px solid #62CB66",
           borderRight: "1px solid #62CB66",
         };

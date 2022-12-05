@@ -1,10 +1,7 @@
-import { getMinutes } from "date-fns";
 import PropTypes from "prop-types";
 import React from "react";
 
 const Tick = ({ tick, count, format }) => {
-  const isFullHour = !getMinutes(tick.value);
-
   const tickLabelStyle = {
     marginLeft: `${-(100 / count) / 2}%`,
     width: `${100 / count}%`,
@@ -14,16 +11,12 @@ const Tick = ({ tick, count, format }) => {
   return (
     <>
       <div
-        className={`react_time_range__tick_marker${
-          isFullHour ? "__large" : ""
-        }`}
+        className='react_time_range__tick_marker__large'
         style={{ left: `${tick.percent}%` }}
       />
-      {isFullHour && (
-        <div className='react_time_range__tick_label' style={tickLabelStyle}>
-          {format(tick.value)}
-        </div>
-      )}
+      <div className='react_time_range__tick_label' style={tickLabelStyle}>
+        {format(tick.value)}
+      </div>
     </>
   );
 };
