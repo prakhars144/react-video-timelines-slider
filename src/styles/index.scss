@@ -1,11 +1,12 @@
 $react-time-range--gray: #C8CACC;
+$react-time-range--black: black;
 $react-time-range--highlight-tap: #000000;
 $react-time-range--rail-bg: rgba(98, 203, 102, 0.5);
 $react-time-range--handle-bg: #FFFFFF;
 $react-time-range--handle-bg--disabled: #666;
 $react-time-range--track--valid: rgb(98, 203, 102);
 $react-time-range--track--not-valid: rgb(214, 0, 11);
-$react-time-range--tick-label: #77828C;
+$react-time-range--tick-label: black;
 $react-time-range--track--disabled: repeating-linear-gradient( -45deg, transparent, transparent 1px, #D0D3D7 6px, #D0D3D7 4px);
 $react-time-range--track-disabled-background-color: rgba(214,0,11,0.5);
 
@@ -108,7 +109,7 @@ $react-time-range--track-disabled-background-color: rgba(214,0,11,0.5);
     margin-top: 20px;
     width: 1px;
     height: 5px;
-    background-color: $react-time-range--gray;
+    background-color: $react-time-range--black;
     z-index: 2;
     &__large {
       @extend .react_time_range__tick_marker;

@@ -17,7 +17,7 @@ tooltips, tooltip format, enabling-disabling tooltip and hiding timeline error i
 |disabledIntervals|array|[]|Array of disabled intervals inside the timeline|
 |containerClassName|string||ClassName of the wrapping container|
 |step|number|1800000|Number of milliseconds between steps (the default value is 30 minutes)|
-|ticksNumber|number|48|Number of steps on the timeline (the default value is 30 minutes)|
+|ticksNumber|number|48|Number of steps on the timeline (the default value is 30 minutes). Note that this is just a hint and actual tick might vary slightly|
 |error|bool|false|Is the selected interval is not valid|
 |mode|int/function|3|The interaction mode. Value of 1 will allow handles to cross each other. Value of 2 will keep the sliders from crossing and separated by a step. Value of 3 will make the handles pushable and keep them a step apart. ADVANCED: You can also supply a function that will be passed the current values and the incoming update. Your function should return what the state should be set as.|
 |formatTick|function|ms => format(new Date(ms), 'HH:mm')|Function that determines the format in which the date will be displayed|
