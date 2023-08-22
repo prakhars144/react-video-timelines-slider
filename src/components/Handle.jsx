@@ -6,7 +6,7 @@ const Handle = ({
   error,
   domain: [min, max],
   handle: { id, value, percent = 0 },
-  disabled,
+  disabled = false,
   showTimelineError,
   formatTooltip,
   getHandleProps,
@@ -77,7 +77,5 @@ Handle.propTypes = {
   showTooltip: PropTypes.bool.isRequired,
   tooltipTag: PropTypes.string.isRequired,
 };
-
-Handle.defaultProps = { disabled: false };
 
 export default Handle;

@@ -37,7 +37,7 @@ const Track = ({
   target,
   showTimelineError,
   getTrackProps,
-  disabled,
+  disabled = false,
 }) => (
   <div
     className={`react_time_range__track${disabled ? "__disabled" : ""}`}
@@ -67,7 +67,5 @@ Track.propTypes = {
   disabled: PropTypes.bool,
   showTimelineError: PropTypes.bool,
 };
-
-Track.defaultProps = { disabled: false };
 
 export default Track;

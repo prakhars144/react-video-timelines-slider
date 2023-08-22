@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-const Tick = ({ tick, count, format }) => {
+const Tick = ({ tick, count, format = (d) =>d }) => {
   const tickLabelStyle = {
     marginLeft: `${-(100 / count) / 2}%`,
     width: `${100 / count}%`,
@@ -30,7 +30,5 @@ Tick.propTypes = {
   count: PropTypes.number.isRequired,
   format: PropTypes.func.isRequired,
 };
-
-Tick.defaultProps = { format: (d) => d };
 
 export default Tick;

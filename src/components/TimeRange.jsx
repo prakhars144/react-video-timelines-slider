@@ -81,7 +81,7 @@ const TimeRange = ({
   mode = 3,
   showTimelineError = false,
   showTooltip = true,
-  onUpdateCallback,
+  onUpdateCallback = () => {},
   onChangeCallback,
 }) => {
   function disabledIntervals() {
@@ -259,7 +259,7 @@ const TimeRange = ({
 TimeRange.propTypes = {
   ticksNumber: PropTypes.number.isRequired,
   selectedInterval: PropTypes.arrayOf(PropTypes.object),
-  timelineInterval: PropTypes.arrayOf(PropTypes.object),
+  timelineInterval: PropTypes.arrayOf(PropTypes.number),
   disabledIntervals: PropTypes.arrayOf(PropTypes.object),
   containerClassName: PropTypes.string,
   sliderRailClassName: PropTypes.string,

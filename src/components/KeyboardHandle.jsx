@@ -4,7 +4,7 @@ import React from "react";
 const KeyboardHandle = ({
   domain: [min, max],
   handle: { id, value, percent = 0 },
-  disabled,
+  disabled = false,
   getHandleProps,
 }) => (
   <button
@@ -31,7 +31,5 @@ KeyboardHandle.propTypes = {
   getHandleProps: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
 };
-
-KeyboardHandle.defaultProps = { disabled: false };
 
 export default KeyboardHandle;
