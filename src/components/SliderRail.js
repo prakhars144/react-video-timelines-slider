@@ -45,21 +45,21 @@ export const SliderRail = ({
             marginTop: "-35px",
           }}
         >
-          <div className='tooltip'>
-            <span className='tooltiptext'>
+          <div className="tooltip">
+            <span className="tooltiptext">
               {tooltipTag + " " + formatTooltip(value)}
             </span>
           </div>
         </div>
       ) : null}
       <div
-        className='react_time_range__rail__outer'
+        className="react_time_range__rail__outer"
         {...getRailProps({
           onMouseEnter: onMouseEnter,
           onMouseLeave: onMouseLeave,
         })}
       />
-      <div className='react_time_range__rail__inner' />
+      <div className="react_time_range__rail__inner" />
     </>
   );
 };

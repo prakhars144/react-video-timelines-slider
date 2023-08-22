@@ -27,15 +27,15 @@ const Handle = ({
             marginTop: "-35px",
           }}
         >
-          <div className='tooltip'>
-            <span className='tooltiptext'>
+          <div className="tooltip">
+            <span className="tooltiptext">
               {tooltipTag + " " + formatTooltip(value)}
             </span>
           </div>
         </div>
       ) : null}
       <div
-        className='react_time_range__handle_wrapper'
+        className="react_time_range__handle_wrapper"
         style={{ left: leftPosition }}
         {...getHandleProps(id, {
           onMouseEnter: () => setMouseOver(true),
@@ -43,7 +43,7 @@ const Handle = ({
         })}
       />
       <div
-        role='slider'
+        role="slider"
         aria-valuemin={min}
         aria-valuemax={max}
         aria-valuenow={value}

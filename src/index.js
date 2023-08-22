@@ -62,24 +62,41 @@ const getNowConfig = ([startTime, endTime]) => {
   return { id: "now-track", source, target };
 };
 
-class TimeRange extends React.Component {
-  get disabledIntervals() {
-    return getFormattedBlockedIntervals(
-      this.props.disabledIntervals,
-      this.props.timelineInterval
-    );
+export const TimeRange = ({
+  sliderRailClassName,
+  timelineInterval = [startOfToday(), endOfToday()],
+  selectedInterval = [
+    set(new Date(), { minutes: 0, seconds: 0, milliseconds: 0 }),
+    set(addHours(new Date(), 1), { minutes: 0, seconds: 0, milliseconds: 0 }),
+  ],
+  disabledIntervals = [],
+  containerClassName,
+  step = 1000 * 60 * 30,
+  ticksNumber = 48,
+  error = false,
+  showNow,
+  formatTick = (ms) => format(new Date(ms), "HH:mm"),
+  formatTooltip = (ms) => format(new Date(ms), "HH:mm:ss"),
+  tooltipTag = "Value:",
+  mode = 3,
+  showTimelineError = false,
+  showTooltip = true,
+  onUpdateCallback,
+}) => {
+  function disabledIntervals() {
+    return getFormattedBlockedIntervals(disabledIntervals, timelineInterval);
   }
 
-  get now() {
-    return getNowConfig(this.props.timelineInterval);
+  function now() {
+    return getNowConfig(timelineInterval);
   }
 
-  onChange = (newTime) => {
+  const onChange = (newTime) => {
     const formattedNewTime = newTime.map((t) => new Date(t));
-    this.props.onChangeCallback(formattedNewTime);
+    onChangeCallback(formattedNewTime);
   };
 
-  checkIsSelectedIntervalNotValid = ([start, end], source, target) => {
+  const checkIsSelectedIntervalNotValid = ([start, end], source, target) => {
     const { value: startInterval } = source;
     const { value: endInterval } = target;
 
@@ -98,13 +115,10 @@ class TimeRange extends React.Component {
     return isStartInBlockedInterval || isEndInBlockedInterval;
   };
 
-  onUpdate = (newTime) => {
-    const { onUpdateCallback } = this.props;
-    const disabledIntervals = this.disabledIntervals;
-
+  const onUpdate = (newTime) => {
     if (disabledIntervals?.length) {
       const isValuesNotValid = disabledIntervals.some(({ source, target }) =>
-        this.checkIsSelectedIntervalNotValid(newTime, source, target)
+        checkIsSelectedIntervalNotValid(newTime, source, target)
       );
       const formattedNewTime = newTime.map((t) => new Date(t));
       onUpdateCallback({ error: isValuesNotValid, time: formattedNewTime });
@@ -115,154 +129,131 @@ class TimeRange extends React.Component {
     onUpdateCallback({ error: false, time: formattedNewTime });
   };
 
-  getDateTicks = () => {
-    const { timelineInterval, ticksNumber } = this.props;
+  const getDateTicks = () => {
     return scaleTime()
       .domain(timelineInterval)
       .ticks(ticksNumber)
       .map((t) => +t);
   };
 
-  render() {
-    const {
-      sliderRailClassName,
-      timelineInterval,
-      selectedInterval,
-      containerClassName,
-      error,
-      step,
-      showNow,
-      formatTick,
-      formatTooltip,
-      mode,
-      showTimelineError,
-      showTooltip,
-      tooltipTag,
-    } = this.props;
+  const domain = timelineInterval.map((t) => Number(t));
 
-    const domain = timelineInterval.map((t) => Number(t));
-
-    const disabledIntervals = this.disabledIntervals;
-
-    return (
-      <div
-        className={
-          containerClassName || "react_time_range__time_range_container"
-        }
+  return (
+    <div
+      className={containerClassName || "react_time_range__time_range_container"}
+    >
+      <Slider
+        mode={mode}
+        step={step}
+        domain={domain}
+        onUpdate={onUpdate}
+        onChange={onChange}
+        values={selectedInterval.map((t) => +t)}
+        rootStyle={{ position: "relative", width: "100%" }}
       >
-        <Slider
-          mode={mode}
-          step={step}
-          domain={domain}
-          onUpdate={this.onUpdate}
-          onChange={this.onChange}
-          values={selectedInterval.map((t) => +t)}
-          rootStyle={{ position: "relative", width: "100%" }}
-        >
-          <Rail>
-            {({ getRailProps, getEventData, activeHandleID }) => (
-              <SliderRail
-                className={sliderRailClassName}
-                activeHandleID={activeHandleID}
-                getRailProps={getRailProps}
-                getEventData={getEventData}
-                formatTooltip={formatTooltip}
-                showTooltip={showTooltip}
-                tooltipTag={tooltipTag}
-              />
-            )}
-          </Rail>
+        <Rail>
+          {({ getRailProps, getEventData, activeHandleID }) => (
+            <SliderRail
+              className={sliderRailClassName}
+              activeHandleID={activeHandleID}
+              getRailProps={getRailProps}
+              getEventData={getEventData}
+              formatTooltip={formatTooltip}
+              showTooltip={showTooltip}
+              tooltipTag={tooltipTag}
+            />
+          )}
+        </Rail>
 
-          <Handles>
-            {({ handles, getHandleProps, activeHandleID }) => (
-              <>
-                {handles.map((handle) => (
-                  <Handle
-                    error={error}
-                    key={handle.id}
-                    handle={handle}
-                    domain={domain}
-                    getHandleProps={getHandleProps}
-                    showTimelineError={showTimelineError}
-                    formatTooltip={formatTooltip}
-                    isActive={handle.id === activeHandleID}
-                    showTooltip={showTooltip}
-                    tooltipTag={tooltipTag}
-                  />
-                ))}
-              </>
-            )}
-          </Handles>
+        <Handles>
+          {({ handles, getHandleProps, activeHandleID }) => (
+            <>
+              {handles.map((handle) => (
+                <Handle
+                  error={error}
+                  key={handle.id}
+                  handle={handle}
+                  domain={domain}
+                  getHandleProps={getHandleProps}
+                  showTimelineError={showTimelineError}
+                  formatTooltip={formatTooltip}
+                  isActive={handle.id === activeHandleID}
+                  showTooltip={showTooltip}
+                  tooltipTag={tooltipTag}
+                />
+              ))}
+            </>
+          )}
+        </Handles>
 
+        <Tracks left={false} right={false}>
+          {({ tracks, getTrackProps }) => (
+            <>
+              {tracks?.map(({ id, source, target }) => (
+                <Track
+                  error={error}
+                  key={id}
+                  source={source}
+                  target={target}
+                  getTrackProps={getTrackProps}
+                  showTimelineError={showTimelineError}
+                />
+              ))}
+            </>
+          )}
+        </Tracks>
+
+        {disabledIntervals?.length && (
           <Tracks left={false} right={false}>
-            {({ tracks, getTrackProps }) => (
+            {({ getTrackProps }) => (
               <>
-                {tracks?.map(({ id, source, target }) => (
+                {disabledIntervals.map(({ id, source, target }) => (
                   <Track
-                    error={error}
                     key={id}
                     source={source}
                     target={target}
                     getTrackProps={getTrackProps}
                     showTimelineError={showTimelineError}
+                    disabled
                   />
                 ))}
               </>
             )}
           </Tracks>
+        )}
 
-          {disabledIntervals?.length && (
-            <Tracks left={false} right={false}>
-              {({ getTrackProps }) => (
-                <>
-                  {disabledIntervals.map(({ id, source, target }) => (
-                    <Track
-                      key={id}
-                      source={source}
-                      target={target}
-                      getTrackProps={getTrackProps}
-                      showTimelineError={showTimelineError}
-                      disabled
-                    />
-                  ))}
-                </>
-              )}
-            </Tracks>
-          )}
-
-          {showNow && (
-            <Tracks left={false} right={false}>
-              {({ getTrackProps }) => (
-                <Track
-                  key={this.now?.id}
-                  source={this.now?.source}
-                  target={this.now?.target}
-                  getTrackProps={getTrackProps}
-                  showTimelineError={showTimelineError}
-                />
-              )}
-            </Tracks>
-          )}
-
-          <Ticks values={this.getDateTicks()}>
-            {({ ticks }) => (
-              <>
-                {ticks.map((tick) => (
-                  <Tick
-                    key={tick.id}
-                    tick={tick}
-                    count={ticks.length}
-                    format={formatTick}
-                  />
-                ))}
-              </>
+        {showNow && (
+          <Tracks left={false} right={false}>
+            {({ getTrackProps }) => (
+              <Track
+                key={now?.id}
+                source={now?.source}
+                target={now?.target}
+                getTrackProps={getTrackProps}
+                showTimelineError={showTimelineError}
+              />
             )}
-          </Ticks>
-        </Slider>
-      </div>
-    );
-  }
-}
+          </Tracks>
+        )}
+
+        <Ticks values={getDateTicks()}>
+          {({ ticks }) => (
+            <>
+              {ticks.map((tick) => (
+                <Tick
+                  key={tick.id}
+                  tick={tick}
+                  count={ticks.length}
+                  format={formatTick}
+                />
+              ))}
+            </>
+          )}
+        </Ticks>
+      </Slider>
+    </div>
+  );
+};
 
 TimeRange.propTypes = {
   ticksNumber: PropTypes.number.isRequired,
@@ -277,24 +268,7 @@ TimeRange.propTypes = {
   showTimelineError: PropTypes.bool,
   showTooltip: PropTypes.bool,
   tooltipTag: PropTypes.string,
+  error: PropTypes.bool,
+  onChangeCallback: PropTypes.func,
+  onUpdateCallback: PropTypes.func,
 };
-
-TimeRange.defaultProps = {
-  selectedInterval: [
-    set(new Date(), { minutes: 0, seconds: 0, milliseconds: 0 }),
-    set(addHours(new Date(), 1), { minutes: 0, seconds: 0, milliseconds: 0 }),
-  ],
-  timelineInterval: [startOfToday(), endOfToday()],
-  formatTick: (ms) => format(new Date(ms), "HH:mm"),
-  formatTooltip: (ms) => format(new Date(ms), "HH:mm:ss"),
-  disabledIntervals: [],
-  step: 1000 * 60 * 30,
-  ticksNumber: 48,
-  error: false,
-  mode: 3,
-  showTimelineError: false,
-  showTooltip: true,
-  tooltipTag: "Value:",
-};
-
-export default TimeRange;
