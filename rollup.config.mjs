@@ -15,18 +15,18 @@ export default {
       sourcemap: true,
       name: "react-lib",
     },
-    {
-      file: packageJson.module,
-      format: "esm",
-      sourcemap: true,
-    },
+    // {
+    //   file: packageJson.module,
+    //   format: "esm",
+    //   sourcemap: true,
+    // },
   ],
   plugins: [
     external(),
     resolve(),
     commonjs(),
     babel({ babelHelpers: "bundled", presets: ["@babel/preset-react"] }),
-    scss({ output: "dist/index.css" }),
+    scss({ fileName: "index.css", outputStyle: "compressed" }),
   ],
   // https://github.com/d3/d3-interpolate/issues/58
   onwarn: function (message) {

@@ -1,12 +1,14 @@
 {
   "name": "@software/react-video-timelines-slider",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "Time Slider component for React",
   "author": "Prakhar Shukla <prakharshukla@outlook.in>",
   "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "files": [
+    "dist/"
+  ],
   "license": "MIT",
-  "type": "module",
+  "type": "commonjs",
   "homepage": "https://github.com/prakhars144/react-video-timelines-slider",
   "repository": {
     "type": "git",
