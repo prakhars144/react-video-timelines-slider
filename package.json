@@ -1,10 +1,12 @@
 {
   "name": "@software/react-video-timelines-slider",
-  "version": "1.1.6",
+  "version": "1.2.0",
   "description": "Time Slider component for React",
   "author": "Prakhar Shukla <prakharshukla@outlook.in>",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "license": "MIT",
+  "type": "module",
   "homepage": "https://github.com/prakhars144/react-video-timelines-slider",
   "repository": {
     "type": "git",
@@ -26,7 +28,7 @@
   },
   "scripts": {
     "start": "webpack --watch",
-    "build": "webpack"
+    "build": "rimraf dist && rollup -c"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -47,22 +49,17 @@
     "d3-scale": "^4.0.2",
     "date-fns": "^2.30.0",
     "prop-types": "^15.8.1",
-    "react-compound-slider": "^3.4.0",
-    "sass": "^1.66.1"
+    "react-compound-slider": "^3.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.10",
-    "@babel/plugin-proposal-class-properties": "^7.13.0",
-    "@babel/preset-env": "^7.13.12",
-    "@babel/preset-react": "^7.12.13",
-    "babel-loader": "^8.2.2",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "css-loader": "^6.8.1",
+    "@babel/preset-react": "^7.22.5",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-node-resolve": "^15.2.1",
     "prettier": "^2.8.0",
-    "sass-loader": "^13.3.2",
-    "style-loader": "^3.3.3",
-    "webpack": "^5.88.1",
-    "webpack-cli": "^5.1.4"
+    "rollup": "^3.28.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-scss": "^3.0.0",
+    "sass": "^1.66.1"
   }
 }
