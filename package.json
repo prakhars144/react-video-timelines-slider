@@ -59,7 +59,7 @@
     "prettier": "^2.8.0",
     "rollup": "^3.28.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-scss": "^3.0.0",
+    "rollup-plugin-scss": "^4.0.0",
     "sass": "^1.66.1"
   }
 }

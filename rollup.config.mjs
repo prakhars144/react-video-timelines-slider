@@ -28,4 +28,11 @@ export default {
     babel({ babelHelpers: "bundled", presets: ["@babel/preset-react"] }),
     scss({ output: "dist/index.css" }),
   ],
+  // https://github.com/d3/d3-interpolate/issues/58
+  onwarn: function (message) {
+    if (message.code === "CIRCULAR_DEPENDENCY") {
+      return;
+    }
+    console.error(message);
+  },
 };
