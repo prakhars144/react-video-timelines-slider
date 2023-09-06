@@ -83,6 +83,7 @@ const TimeRange = ({
   showTooltip = true,
   onUpdateCallback = () => {},
   onChangeCallback,
+  onHandlesClick,
 }) => {
   function disabledIntervals() {
     return getFormattedBlockedIntervals(disabledIntervals, timelineInterval);
@@ -181,6 +182,7 @@ const TimeRange = ({
                   isActive={handle.id === activeHandleID}
                   showTooltip={showTooltip}
                   tooltipTag={tooltipTag}
+                  onHandleClick={onHandlesClick}
                 />
               ))}
             </>
@@ -204,7 +206,7 @@ const TimeRange = ({
           )}
         </Tracks>
 
-        {disabledIntervals?.length ?(
+        {disabledIntervals?.length ? (
           <Tracks left={false} right={false}>
             {({ getTrackProps }) => (
               <>
@@ -221,7 +223,7 @@ const TimeRange = ({
               </>
             )}
           </Tracks>
-        ): undefined}
+        ) : undefined}
 
         {showNow ? (
           <Tracks left={false} right={false}>
@@ -235,7 +237,7 @@ const TimeRange = ({
               />
             )}
           </Tracks>
-        ): undefined}
+        ) : undefined}
 
         <Ticks values={getDateTicks()}>
           {({ ticks }) => (
@@ -272,6 +274,7 @@ TimeRange.propTypes = {
   error: PropTypes.bool,
   onChangeCallback: PropTypes.func,
   onUpdateCallback: PropTypes.func,
+  onHandlesClick: PropTypes.func,
 };
 
 export default TimeRange;

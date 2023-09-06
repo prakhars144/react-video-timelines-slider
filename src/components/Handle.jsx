@@ -13,6 +13,7 @@ const Handle = ({
   isActive,
   showTooltip,
   tooltipTag,
+  onHandleClick,
 }) => {
   const leftPosition = `${percent}%`;
   const [mouseOver, setMouseOver] = useState(false);
@@ -41,6 +42,7 @@ const Handle = ({
           onMouseEnter: () => setMouseOver(true),
           onMouseLeave: () => setMouseOver(false),
         })}
+        onClick={() => onHandleClick?.(id, value)}
       />
       <div
         role="slider"
@@ -76,6 +78,7 @@ Handle.propTypes = {
   isActive: PropTypes.bool.isRequired,
   showTooltip: PropTypes.bool.isRequired,
   tooltipTag: PropTypes.string.isRequired,
+  onHandleClick: PropTypes.func,
 };
 
 export default Handle;
