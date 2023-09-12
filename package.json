@@ -1,6 +1,6 @@
 {
   "name": "@software/react-video-timelines-slider",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Time Slider component for React",
   "author": "Prakhar Shukla <prakharshukla@outlook.in>",
   "files": [
