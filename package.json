@@ -1,6 +1,6 @@
 {
   "name": "@software/react-video-timelines-slider",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Time Slider component for React",
   "author": "Prakhar Shukla <prakharshukla@outlook.in>",
   "files": [
@@ -26,7 +26,7 @@
   "homepage": "https://github.com/prakhars144/react-video-timelines-slider",
   "repository": {
     "type": "git",
-    "url": "https://github.com/prakhars144/react-video-timelines-slider"
+    "url": "git+https://github.com/prakhars144/react-video-timelines-slider.git"
   },
   "keywords": [
     "react-component",
