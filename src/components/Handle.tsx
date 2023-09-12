@@ -35,6 +35,7 @@ const Handle = ({
 }: HandleProps) => {
   const leftPosition = `${percent}%`;
   const [mouseOver, setMouseOver] = useState(false);
+
   return (
     <>
       {(mouseOver || isActive) && !disabled && showTooltip ? (
