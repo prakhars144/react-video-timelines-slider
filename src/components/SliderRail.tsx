@@ -1,6 +1,16 @@
-import React, { useState, useCallback } from "react";
-import PropTypes from "prop-types";
+import { useCallback, useState } from "react";
+import { GetRailProps } from "react-compound-slider";
 import "./tooltip.scss";
+
+export interface SliderRailProps {
+  getEventData: (e: MouseEvent) => { value: number; percent: number };
+  formatTooltip: (ms: number) => string;
+  getRailProps: GetRailProps;
+  activeHandleID: string;
+  showTooltip: boolean;
+  tooltipTag: string;
+  className?: string;
+}
 
 export const SliderRail = ({
   getEventData,
@@ -9,20 +19,24 @@ export const SliderRail = ({
   activeHandleID,
   showTooltip,
   tooltipTag,
-}) => {
-  const [percent, setPercent] = useState(null);
-  const [value, setValue] = useState(null);
+  className,
+}: SliderRailProps) => {
+  const [percent, setPercent] = useState<number | null>(null);
+  const [value, setValue] = useState<number | null>(null);
 
-  const scrollCallback = useCallback((e) => {
-    if (activeHandleID) {
-      setValue(null);
-      setPercent(null);
-    } else {
-      const { value, percent } = getEventData(e);
-      setValue(value);
-      setPercent(percent);
-    }
-  }, []);
+  const scrollCallback = useCallback(
+    (e: MouseEvent) => {
+      if (activeHandleID) {
+        setValue(null);
+        setPercent(null);
+      } else {
+        const { value, percent } = getEventData(e);
+        setValue(value);
+        setPercent(percent);
+      }
+    },
+    [activeHandleID, getEventData]
+  );
 
   const onMouseEnter = () => {
     document.addEventListener("mousemove", scrollCallback, true);
@@ -53,7 +67,9 @@ export const SliderRail = ({
         </div>
       ) : null}
       <div
-        className="react_time_range__rail__outer"
+        className={
+          "react_time_range__rail__outer" + (className ? " " + className : "")
+        }
         {...getRailProps({
           onMouseEnter: onMouseEnter,
           onMouseLeave: onMouseLeave,
@@ -62,15 +78,6 @@ export const SliderRail = ({
       <div className="react_time_range__rail__inner" />
     </>
   );
-};
-
-SliderRail.propTypes = {
-  getEventData: PropTypes.func.isRequired,
-  getRailProps: PropTypes.func.isRequired,
-  formatTooltip: PropTypes.func.isRequired,
-  activeHandleID: PropTypes.string.isRequired,
-  showTooltip: PropTypes.bool.isRequired,
-  tooltipTag: PropTypes.string.isRequired,
 };
 
 export default SliderRail;

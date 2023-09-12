@@ -1,38 +1,37 @@
-import React from "react";
-import PropTypes from "prop-types";
 import { scaleTime } from "d3-scale";
-import { Slider, Rail, Handles, Tracks, Ticks } from "react-compound-slider";
 import {
-  format,
   addHours,
-  startOfToday,
-  endOfToday,
-  differenceInMilliseconds,
-  isBefore,
-  isAfter,
-  set,
   addMinutes,
+  differenceInMilliseconds,
+  endOfToday,
+  format,
+  isAfter,
+  isBefore,
+  set,
+  startOfToday,
 } from "date-fns";
+import { Handles, Rail, Slider, Ticks, Tracks } from "react-compound-slider";
 
-import SliderRail from "./SliderRail.jsx";
-import Track from "./Track.jsx";
-import Tick from "./Tick.jsx";
-import Handle from "./Handle.jsx";
+import Handle from "./Handle";
+import SliderRail from "./SliderRail";
+import Tick from "./Tick";
+import Track from "./Track";
 
 import "./TimeRange.scss";
 
-const getTimelineConfig = (timelineStart, timelineLength) => (date) => {
-  const percent =
-    (differenceInMilliseconds(date, timelineStart) / timelineLength) * 100;
-  const value = Number(format(date, "T"));
-  return { percent, value };
-};
+const getTimelineConfig =
+  (timelineStart: Date, timelineLength: number) => (date: Date) => {
+    const percent =
+      (differenceInMilliseconds(date, timelineStart) / timelineLength) * 100;
+    const value = Number(format(date, "T"));
+    return { percent, value };
+  };
 
 const getFormattedBlockedIntervals = (
-  blockedDates = [],
-  [startTime, endTime]
+  blockedDates: { start: Date; end: Date }[] = [],
+  [startTime, endTime]: Date[]
 ) => {
-  if (!blockedDates.length) return null;
+  if (!blockedDates.length) return undefined;
 
   const timelineLength = differenceInMilliseconds(endTime, startTime);
   const getConfig = getTimelineConfig(startTime, timelineLength);
@@ -52,7 +51,7 @@ const getFormattedBlockedIntervals = (
   return formattedBlockedDates;
 };
 
-const getNowConfig = ([startTime, endTime]) => {
+const getNowConfig = ([startTime, endTime]: Date[]) => {
   const timelineLength = differenceInMilliseconds(endTime, startTime);
   const getConfig = getTimelineConfig(startTime, timelineLength);
 
@@ -61,6 +60,27 @@ const getNowConfig = ([startTime, endTime]) => {
 
   return { id: "now-track", source, target };
 };
+
+export interface TimeRangeProps {
+  sliderRailClassName?: string;
+  timelineInterval?: Date[];
+  selectedInterval?: Date[];
+  disabledIntervals?: { start: Date; end: Date }[];
+  containerClassName?: string;
+  step?: number;
+  ticksNumber?: number;
+  error?: boolean;
+  showNow?: boolean;
+  formatTick?: (ms: number) => string;
+  formatTooltip?: (ms: number) => string;
+  tooltipTag?: string;
+  mode?: 1 | 2 | 3;
+  showTimelineError?: boolean;
+  showTooltip?: boolean;
+  onUpdateCallback?: (data: { error: boolean; time: Date[] }) => void;
+  onChangeCallback?: (data: Date[]) => void;
+  onHandlesClick?: (id: string, value: number) => void;
+}
 
 const TimeRange = ({
   sliderRailClassName,
@@ -84,21 +104,23 @@ const TimeRange = ({
   onUpdateCallback = () => {},
   onChangeCallback,
   onHandlesClick,
-}) => {
-  function disabledIntervals() {
-    return getFormattedBlockedIntervals(disabledIntervals, timelineInterval);
-  }
+}: TimeRangeProps) => {
+  const disabledIntervalsConfig = getFormattedBlockedIntervals(
+    disabledIntervals,
+    timelineInterval
+  );
+  const now = getNowConfig(timelineInterval);
 
-  function now() {
-    return getNowConfig(timelineInterval);
-  }
-
-  const onChange = (newTime) => {
+  const onChange = (newTime: ReadonlyArray<number>) => {
     const formattedNewTime = newTime.map((t) => new Date(t));
-    onChangeCallback(formattedNewTime);
+    if (onChangeCallback) onChangeCallback(formattedNewTime);
   };
 
-  const checkIsSelectedIntervalNotValid = ([start, end], source, target) => {
+  const checkIsSelectedIntervalNotValid = (
+    [start, end]: readonly number[],
+    source: { value: number },
+    target: { value: number }
+  ) => {
     const { value: startInterval } = source;
     const { value: endInterval } = target;
 
@@ -117,10 +139,11 @@ const TimeRange = ({
     return isStartInBlockedInterval || isEndInBlockedInterval;
   };
 
-  const onUpdate = (newTime) => {
-    if (disabledIntervals?.length) {
-      const isValuesNotValid = disabledIntervals.some(({ source, target }) =>
-        checkIsSelectedIntervalNotValid(newTime, source, target)
+  const onUpdate = (newTime: ReadonlyArray<number>) => {
+    if (disabledIntervalsConfig?.length) {
+      const isValuesNotValid = disabledIntervalsConfig.some(
+        ({ source, target }) =>
+          checkIsSelectedIntervalNotValid(newTime, source, target)
       );
       const formattedNewTime = newTime.map((t) => new Date(t));
       onUpdateCallback({ error: isValuesNotValid, time: formattedNewTime });
@@ -138,7 +161,10 @@ const TimeRange = ({
       .map((t) => +t);
   };
 
-  const domain = timelineInterval.map((t) => Number(t));
+  const domain: [number, number] = [
+    Number(timelineInterval[0]),
+    Number(timelineInterval[1]),
+  ];
 
   return (
     <div
@@ -206,11 +232,11 @@ const TimeRange = ({
           )}
         </Tracks>
 
-        {disabledIntervals?.length ? (
+        {disabledIntervalsConfig?.length ? (
           <Tracks left={false} right={false}>
             {({ getTrackProps }) => (
               <>
-                {disabledIntervals.map(({ id, source, target }) => (
+                {disabledIntervalsConfig.map(({ id, source, target }) => (
                   <Track
                     key={id}
                     source={source}
@@ -256,25 +282,6 @@ const TimeRange = ({
       </Slider>
     </div>
   );
-};
-
-TimeRange.propTypes = {
-  ticksNumber: PropTypes.number.isRequired,
-  selectedInterval: PropTypes.arrayOf(PropTypes.object),
-  timelineInterval: PropTypes.arrayOf(PropTypes.number),
-  disabledIntervals: PropTypes.arrayOf(PropTypes.object),
-  containerClassName: PropTypes.string,
-  sliderRailClassName: PropTypes.string,
-  step: PropTypes.number,
-  formatTick: PropTypes.func,
-  formatTooltip: PropTypes.func,
-  showTimelineError: PropTypes.bool,
-  showTooltip: PropTypes.bool,
-  tooltipTag: PropTypes.string,
-  error: PropTypes.bool,
-  onChangeCallback: PropTypes.func,
-  onUpdateCallback: PropTypes.func,
-  onHandlesClick: PropTypes.func,
 };
 
 export default TimeRange;

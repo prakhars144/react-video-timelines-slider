@@ -1,6 +1,24 @@
-import PropTypes from "prop-types";
-import React, { useState } from "react";
+import { useState } from "react";
+import { GetHandleProps } from "react-compound-slider";
 import "./tooltip.scss";
+
+export interface HandleProps {
+  error: boolean;
+  domain: [number, number];
+  handle: {
+    id: string;
+    value: number;
+    percent: number;
+  };
+  disabled?: boolean;
+  showTimelineError?: boolean;
+  formatTooltip: (ms: number) => string;
+  getHandleProps: GetHandleProps;
+  isActive: boolean;
+  showTooltip: boolean;
+  tooltipTag: string;
+  onHandleClick?: (id: string, value: number) => void;
+}
 
 const Handle = ({
   error,
@@ -14,7 +32,7 @@ const Handle = ({
   showTooltip,
   tooltipTag,
   onHandleClick,
-}) => {
+}: HandleProps) => {
   const leftPosition = `${percent}%`;
   const [mouseOver, setMouseOver] = useState(false);
   return (
@@ -62,23 +80,6 @@ const Handle = ({
       </div>
     </>
   );
-};
-
-Handle.propTypes = {
-  domain: PropTypes.array.isRequired,
-  handle: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    value: PropTypes.number.isRequired,
-    percent: PropTypes.number.isRequired,
-  }).isRequired,
-  getHandleProps: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
-  style: PropTypes.object,
-  formatTooltip: PropTypes.func.isRequired,
-  isActive: PropTypes.bool.isRequired,
-  showTooltip: PropTypes.bool.isRequired,
-  tooltipTag: PropTypes.string.isRequired,
-  onHandleClick: PropTypes.func,
 };
 
 export default Handle;
