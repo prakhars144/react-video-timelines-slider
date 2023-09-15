@@ -2,7 +2,7 @@
 
 This project is forked from **react-timeline-range-slider** [prakhars144](https://github.com/prakhars144/react-video-timelines-slider) which is a fork of [lizashkod](https://github.com/lizashkod).
 
-Compared to the previous fork, we contributed modernized tooling with vite and a new callback for clicking on the handles.
+Compared to the previous fork, we contributed modernized tooling with vite, typescript, and a new callback for clicking on the handles.
 
 We only have an internal npm registry for now. In case people are interested in this, I guess we can setup something public. However, ideally the changes would get accepted in upstream.
 
