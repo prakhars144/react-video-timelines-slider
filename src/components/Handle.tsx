@@ -1,21 +1,41 @@
-import PropTypes from "prop-types";
-import React, { useState } from "react";
+import { useState } from "react";
+import { GetHandleProps } from "react-compound-slider";
 import "./tooltip.scss";
+
+export interface HandleProps {
+  error: boolean;
+  domain: [number, number];
+  handle: {
+    id: string;
+    value: number;
+    percent: number;
+  };
+  disabled?: boolean;
+  showTimelineError?: boolean;
+  formatTooltip: (ms: number) => string;
+  getHandleProps: GetHandleProps;
+  isActive: boolean;
+  showTooltip: boolean;
+  tooltipTag: string;
+  onHandleClick?: (id: string, value: number) => void;
+}
 
 const Handle = ({
   error,
   domain: [min, max],
   handle: { id, value, percent = 0 },
-  disabled,
+  disabled = false,
   showTimelineError,
   formatTooltip,
   getHandleProps,
   isActive,
   showTooltip,
   tooltipTag,
-}) => {
+  onHandleClick,
+}: HandleProps) => {
   const leftPosition = `${percent}%`;
   const [mouseOver, setMouseOver] = useState(false);
+
   return (
     <>
       {(mouseOver || isActive) && !disabled && showTooltip ? (
@@ -27,23 +47,24 @@ const Handle = ({
             marginTop: "-35px",
           }}
         >
-          <div className='tooltip'>
-            <span className='tooltiptext'>
+          <div className="tooltip">
+            <span className="tooltiptext">
               {tooltipTag + " " + formatTooltip(value)}
             </span>
           </div>
         </div>
       ) : null}
       <div
-        className='react_time_range__handle_wrapper'
+        className="react_time_range__handle_wrapper"
         style={{ left: leftPosition }}
         {...getHandleProps(id, {
           onMouseEnter: () => setMouseOver(true),
           onMouseLeave: () => setMouseOver(false),
         })}
+        onClick={() => onHandleClick?.(id, value)}
       />
       <div
-        role='slider'
+        role="slider"
         aria-valuemin={min}
         aria-valuemax={max}
         aria-valuenow={value}
@@ -61,23 +82,5 @@ const Handle = ({
     </>
   );
 };
-
-Handle.propTypes = {
-  domain: PropTypes.array.isRequired,
-  handle: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    value: PropTypes.number.isRequired,
-    percent: PropTypes.number.isRequired,
-  }).isRequired,
-  getHandleProps: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
-  style: PropTypes.object,
-  formatTooltip: PropTypes.func.isRequired,
-  isActive: PropTypes.bool.isRequired,
-  showTooltip: PropTypes.bool.isRequired,
-  tooltipTag: PropTypes.string.isRequired,
-};
-
-Handle.defaultProps = { disabled: false };
 
 export default Handle;

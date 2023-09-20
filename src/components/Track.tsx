@@ -1,5 +1,4 @@
-import PropTypes from "prop-types";
-import React from "react";
+import { GetTrackProps } from "react-compound-slider";
 
 const getTrackConfig = ({
   error,
@@ -7,7 +6,7 @@ const getTrackConfig = ({
   target,
   showTimelineError,
   disabled,
-}) => {
+}: Omit<TrackProps, "getTrackProps">) => {
   const basicStyle = {
     left: `${source.percent}%`,
     width: `calc(${target.percent - source.percent}% - 1px)`,
@@ -31,14 +30,29 @@ const getTrackConfig = ({
   return { ...basicStyle, ...coloredTrackStyle };
 };
 
+export interface TrackProps {
+  error?: boolean;
+  source: {
+    value: number;
+    percent: number;
+  };
+  target: {
+    value: number;
+    percent: number;
+  };
+  showTimelineError: boolean;
+  getTrackProps: GetTrackProps;
+  disabled?: boolean;
+}
+
 const Track = ({
   error,
   source,
   target,
   showTimelineError,
   getTrackProps,
-  disabled,
-}) => (
+  disabled = false,
+}: TrackProps) => (
   <div
     className={`react_time_range__track${disabled ? "__disabled" : ""}`}
     style={getTrackConfig({
@@ -51,23 +65,5 @@ const Track = ({
     {...getTrackProps()}
   />
 );
-
-Track.propTypes = {
-  source: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    value: PropTypes.number.isRequired,
-    percent: PropTypes.number.isRequired,
-  }).isRequired,
-  target: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    value: PropTypes.number.isRequired,
-    percent: PropTypes.number.isRequired,
-  }).isRequired,
-  getTrackProps: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
-  showTimelineError: PropTypes.bool,
-};
-
-Track.defaultProps = { disabled: false };
 
 export default Track;
