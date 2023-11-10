@@ -1,6 +1,6 @@
 {
   "name": "react-video-timelines-slider",
-  "version": "1.1.6",
+  "version": "1.1.8",
   "description": "Time Slider component for React",
   "author": "Prakhar Shukla <prakharshukla@outlook.in>",
   "main": "dist/index.js",
