@@ -1,6 +1,6 @@
 {
   "name": "react-video-timelines-slider",
-  "version": "1.1.8",
+  "version": "2.0.2",
   "description": "Time Slider component for React",
   "author": "Prakhar Shukla <prakharshukla@outlook.in>",
   "main": "dist/index.js",
@@ -21,8 +21,8 @@
     "range"
   ],
   "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "scripts": {
     "start": "webpack --watch",
