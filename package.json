@@ -1,6 +1,6 @@
 {
   "name": "react-video-timelines-slider",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Time Slider component for React",
   "author": "Prakhar Shukla <prakharshukla@outlook.in>",
   "main": "dist/index.js",
@@ -53,6 +53,7 @@
   "devDependencies": {
     "@babel/core": "^7.13.10",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
     "@babel/preset-env": "^7.13.12",
     "@babel/preset-react": "^7.12.13",
     "babel-loader": "^8.2.2",
