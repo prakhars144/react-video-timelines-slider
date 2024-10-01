@@ -1,3 +1,6 @@
+## Important Note
+The project is not maintained anymore. Please feel free to fork and make it work for your use-case.
+
 ### react-video-timelines-slider
 This project is forked from **react-timeline-range-slider** by [lizashkod](https://github.com/lizashkod) and it adds more functionality and security updates. The additional functionality includes support for
 tooltips, tooltip format, enabling-disabling tooltip and hiding timeline error if gap is selected.
